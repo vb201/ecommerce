@@ -1,55 +1,78 @@
 package com.ecommerce.backend.model;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
-import jakarta.persistence.Column;
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "orders")
+
 public class Order {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String customerName;
-    private String customerEmail;
-    private BigDecimal totalPrice;
-    
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime orderDate;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@ManyToOne
+	@JoinColumn(name = "userId")
+	private User user;
+
+	@ManyToOne
+	@JoinColumn(name = "productId")
+	private Product product;
+
+	@CreationTimestamp
+	private Timestamp orderDate;
+
+	public Timestamp getOrderDate() {
+		return orderDate;
+	}
+
+	public void setOrderDate(Timestamp orderDate) {
+		this.orderDate = orderDate;
+	}
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getCustomerName() {
-		return customerName;
+
+	public User getUser() {
+		return user;
 	}
-	public void setCustomerName(String customerName) {
-		this.customerName = customerName;
+
+	public void setUser(User user) {
+		this.user = user;
 	}
-	public String getCustomerEmail() {
-		return customerEmail;
+
+	public Product getProduct() {
+		return product;
 	}
-	public void setCustomerEmail(String customerEmail) {
-		this.customerEmail = customerEmail;
+
+	public void setProduct(Product product) {
+		this.product = product;
 	}
-	public BigDecimal getTotalPrice() {
-		return totalPrice;
+
+	public Order(Long id, User user, Product product) {
+		super();
+		this.id = id;
+		this.user = user;
+		this.product = product;
 	}
-	public void setTotalPrice(BigDecimal totalPrice) {
-		this.totalPrice = totalPrice;
+
+	public Order() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
-	public LocalDateTime getOrderDate() {
-		return orderDate;
-	}
-	public void setOrderDate(LocalDateTime orderDate) {
-		this.orderDate = orderDate;
-	}
+
 }

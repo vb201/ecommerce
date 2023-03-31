@@ -6,6 +6,6 @@ import com.ecommerce.backend.model.Product;
 
 public interface ProductService {
     List<Product> getAllProducts();
-    Product getProductById(Long id);
+    Product getProductById(Long productId);
     Product createProduct(Product product);
 }

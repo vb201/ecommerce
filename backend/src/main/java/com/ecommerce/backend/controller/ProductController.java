@@ -3,6 +3,7 @@ package com.ecommerce.backend.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import com.ecommerce.backend.services.ProductService;
 
 @RestController
 @RequestMapping("/api/products")
+@CrossOrigin(origins = "*" )
 public class ProductController {
     @Autowired
     private ProductService productService;
@@ -24,9 +26,9 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
-    @GetMapping("/{id}")
-    public Product getProductById(@PathVariable Long id) {
-        return productService.getProductById(id);
+    @GetMapping("/{productId}")
+    public Product getProductById(@PathVariable Long productId) {
+        return productService.getProductById(productId);
     }
 
     @PostMapping
