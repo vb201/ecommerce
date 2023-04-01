@@ -7,4 +7,5 @@ import com.ecommerce.backend.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+    User findByUserEmail(String userEmail);
 }

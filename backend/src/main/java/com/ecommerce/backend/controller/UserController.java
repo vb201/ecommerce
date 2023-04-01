@@ -18,7 +18,7 @@ import com.ecommerce.backend.services.UserService;
 
 @RestController
 @RequestMapping("api/users")
-@CrossOrigin(origins = "*" )
+@CrossOrigin(origins = "*")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -33,11 +33,6 @@ public class UserController {
         return userService.getUserById(userId);
     }
 
-    @PostMapping("")
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
-    }
-
     @PutMapping("/{userId}")
     public User updateUser(@PathVariable Long userId, @RequestBody User user) {
         return userService.updateUser(userId, user);
@@ -47,5 +42,14 @@ public class UserController {
     public void deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
     }
-}
 
+    @PostMapping("/login")
+    public Long login(@RequestBody User user) {
+        return userService.login(user);
+    }
+
+    @PostMapping("/register")
+    public User register(@RequestBody User user) {
+        return userService.createUser(user);
+    }
+}

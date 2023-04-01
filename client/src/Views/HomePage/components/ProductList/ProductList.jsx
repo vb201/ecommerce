@@ -9,7 +9,7 @@ const ProductList = () => {
     loading,
     error,
     contentState: products,
-  } = useContentFetch(API.fetchAllProducts());
+  } = useContentFetch(API.fetchAllProducts(), 'allProducts');
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error...</div>;

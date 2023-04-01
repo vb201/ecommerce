@@ -19,7 +19,6 @@ const HomePage = () => {
     <>
       <StyledBody>
         <Header title="Products" />
-
         <ProductListWithData />
       </StyledBody>
     </>

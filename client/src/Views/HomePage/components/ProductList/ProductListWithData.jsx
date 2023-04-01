@@ -11,6 +11,7 @@ const ProductWithData = () => {
   } = useContentFetch(API.fetchAllProducts());
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error...</div>;
+
   if (Object.keys(ProductData).length >= 1)
     return <ProductList ProductData={ProductData} />;
 };

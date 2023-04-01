@@ -9,7 +9,22 @@ import { Link } from 'react-router-dom';
 
 const StyledToolbar = styled(Toolbar)`
   display: flex;
+  align-items: center;
   justify-content: space-between;
+`;
+
+const StyledButton = styled(Button)`
+  &:hover {
+    background-color: #1976d2;
+  }
+`;
+
+const StyledIconButton = styled(IconButton)`
+  color: #fff;
+  background-color: #1976d2;
+  &:hover {
+    background-color: #1976d2;
+  }
 `;
 
 const StyledLogo = styled(Box)`
@@ -29,6 +44,11 @@ const StyledLinkContainer = styled(Box)`
   marginx: 1rem;
 `;
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: #fff;
+`;
+
 const Navbar = () => {
   const [cartQuantity] = useAtom(cartQuantityAtom);
   return (
@@ -38,28 +58,24 @@ const Navbar = () => {
           <StyledLogo>E-Commerce</StyledLogo>
         </Link>
         <StyledLinkContainer>
-          <Link to="/login">
-            <Button
+          <StyledLink to="/signin">
+            <StyledButton
               variant="filled"
               disableElevation
-              sx={{ '&:hover': { backgroundColor: '#1976d2' } }}
             >
-              Login
-            </Button>
-          </Link>
-          <Link to="/cart">
-            <IconButton
-              size="large"
-              sx={{ '&:hover': { backgroundColor: '#1976d2' } }}
-            >
+              Signin
+            </StyledButton>
+          </StyledLink>
+          <StyledLink to="/cart">
+            <StyledIconButton size="large">
               <Badge
                 badgeContent={cartQuantity}
                 color="primary"
               >
                 <ShoppingCartIcon />
               </Badge>
-            </IconButton>
-          </Link>
+            </StyledIconButton>
+          </StyledLink>
         </StyledLinkContainer>
       </StyledToolbar>
     </AppBar>

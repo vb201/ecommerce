@@ -31,15 +31,22 @@ public class UserServiceImpl implements UserService {
 
     public User updateUser(Long userId, User user) {
         User existingUser = getUserById(userId);
-        existingUser.setUserName(user.getUserName());
+        existingUser.setUserName(user.getUsername());
         existingUser.setUserEmail(user.getUserEmail());
         existingUser.setUserPassword(user.getUserPassword());
-        existingUser.setUserPhone(user.getUserPhone());
         return userRepository.save(existingUser);
     }
 
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
+    }
+
+    public Long login(User user) {
+        User existingUser = userRepository.findByUserEmail(user.getUserEmail());
+        if (existingUser != null && existingUser.getUserPassword().equals(user.getUserPassword())) {
+            return existingUser.getId();
+        }
+        return null;
     }
 
 }

@@ -7,6 +7,10 @@ const API = {
     const endpoint = `products/${id}`;
     return endpoint;
   },
+  registerUser: () => {
+    const endpoint = `users/register`;
+    return endpoint;
+  },
 };
 
 export default API;

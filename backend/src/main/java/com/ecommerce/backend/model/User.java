@@ -1,78 +1,81 @@
 package com.ecommerce.backend.model;
 
+import java.util.Collection;
 import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "users")
 
-public class User {
+public class User implements UserDetails {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue
 	private Long id;
+
+	@Column(nullable = false)
 	private String userName;
+
+	@Column(nullable = false)
 	private String userEmail;
+
+	@Column(nullable = false)
 	private String userPassword;
-	private String userPhone;
 
-	public Long getId() {
-		return id;
+	@Enumerated(EnumType.STRING)
+	private Role role;
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(new SimpleGrantedAuthority(role.name()));
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	@Override
+	public String getPassword() {
+		throw new UnsupportedOperationException("Unimplemented method 'getPassword'");
 	}
 
-	public String getUserName() {
-		return userName;
+	@Override
+	public String getUsername() {
+		throw new UnsupportedOperationException("Unimplemented method 'getUsername'");
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	@Override
+	public boolean isAccountNonExpired() {
+		throw new UnsupportedOperationException("Unimplemented method 'isAccountNonExpired'");
 	}
 
-	public String getUserEmail() {
-		return userEmail;
+	@Override
+	public boolean isAccountNonLocked() {
+		throw new UnsupportedOperationException("Unimplemented method 'isAccountNonLocked'");
 	}
 
-	public void setUserEmail(String userEmail) {
-		this.userEmail = userEmail;
+	@Override
+	public boolean isCredentialsNonExpired() {
+		throw new UnsupportedOperationException("Unimplemented method 'isCredentialsNonExpired'");
 	}
 
-	public String getUserPassword() {
-		return userPassword;
-	}
-
-	public void setUserPassword(String userPassword) {
-		this.userPassword = userPassword;
-	}
-
-	public String getUserPhone() {
-		return userPhone;
-	}
-
-	public void setUserPhone(String userPhone) {
-		this.userPhone = userPhone;
-	}
-
-	public User(Long id, String userName, String userEmail, String userPassword, String userPhone) {
-		super();
-		this.id = id;
-		this.userName = userName;
-		this.userEmail = userEmail;
-		this.userPassword = userPassword;
-		this.userPhone = userPhone;
-	}
-
-	public User() {
-		super();
-		// TODO Auto-generated constructor stub
+	@Override
+	public boolean isEnabled() {
+		throw new UnsupportedOperationException("Unimplemented method 'isEnabled'");
 	}
 
 }

@@ -1,10 +1,11 @@
 import styled from '@emotion/styled';
-import { Box, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { useAtom } from 'jotai';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { cartAmountAtom, cartAtom, cartQuantityAtom } from '../../atoms/atom';
-import ProductCard from './components/ProductCard/ProductCard';
+import OrderSummary from '../../components/Summary/Summary';
+import ProductCard from '../../components/ProductCard/ProductCard';
 
 const Title = styled.h1`
   font-weight: 300;
@@ -18,14 +19,17 @@ const Top = styled(Box)`
   padding: 20px;
 `;
 
-const TopButton = styled.button`
+const TopButton = styled(Button)`
   padding: 10px;
   font-weight: 600;
   cursor: pointer;
-  border: ${(props) => props.type === 'filled' && 'none'};
-  background-color: ${(props) =>
-    props.type === 'filled' ? 'black' : 'transparent'};
-  color: ${(props) => props.type === 'filled' && 'white'};
+  color: black;
+  border: 1px solid lightgray;
+
+  &:hover {
+    background-color: lightgray;
+    border: 1px solid lightgray;
+  }
 `;
 
 const TopText = styled(Typography)`
@@ -41,38 +45,6 @@ const Bottom = styled(Box)`
 
 const Info = styled.div`
   flex: 3;
-`;
-
-const Summary = styled.div`
-  flex: 1;
-  border: 0.5px solid lightgray;
-  border-radius: 10px;
-  padding: 20px;
-  height: 50vh;
-`;
-
-const SummaryTitle = styled.h1`
-  font-weight: 200;
-`;
-
-const SummaryItem = styled.div`
-  margin: 30px 0px;
-  display: flex;
-  justify-content: space-between;
-  font-weight: ${(props) => props.type === 'total' && '500'};
-  font-size: ${(props) => props.type === 'total' && '24px'};
-`;
-
-const SummaryItemText = styled.span``;
-
-const SummaryItemPrice = styled.span``;
-
-const StyledButton = styled.button`
-  width: 100%;
-  padding: 10px;
-  background-color: black;
-  color: white;
-  font-weight: 600;
 `;
 
 const Cart = () => {
@@ -111,7 +83,7 @@ const Cart = () => {
         <Title>YOUR BAG</Title>
         <Top>
           <Link to="/">
-            <TopButton>CONTINUE SHOPPING</TopButton>
+            <TopButton variant="outlined">CONTINUE SHOPPING</TopButton>
           </Link>
           <TopText>Shopping Bag({cartQuantity})</TopText>
         </Top>
@@ -121,32 +93,37 @@ const Cart = () => {
               <ProductCard
                 item={item}
                 key={index}
-                noDetails={false}
+                noDescription={false}
               />
             ))}
           </Info>
-          <Summary>
-            <SummaryTitle>ORDER SUMMARY</SummaryTitle>
-            <SummaryItem>
-              <SummaryItemText>Subtotal</SummaryItemText>
-              <SummaryItemPrice>₹ {cartAmount}</SummaryItemPrice>
-            </SummaryItem>
-            <SummaryItem>
-              <SummaryItemText>Estimated Shipping</SummaryItemText>
-              <SummaryItemPrice>₹ 590</SummaryItemPrice>
-            </SummaryItem>
-            <SummaryItem>
-              <SummaryItemText>Shipping Discount</SummaryItemText>
-              <SummaryItemPrice>₹ -590</SummaryItemPrice>
-            </SummaryItem>
-            <SummaryItem type="total">
-              <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>₹ {cartAmount}</SummaryItemPrice>
-            </SummaryItem>
-            <Link to="/checkout">
-              <StyledButton>CHECKOUT NOW</StyledButton>
-            </Link>
-          </Summary>
+          <OrderSummary
+            title="ORDER"
+            textItems={[
+              {
+                primaryText: 'Subtotal',
+                secondaryText: `₹ ${cartAmount}`,
+              },
+              {
+                primaryText: 'Estimated Shipping',
+                secondaryText: '₹ 0',
+              },
+              {
+                primaryText: 'Estimated Tax',
+                secondaryText: '₹ 0',
+              },
+              {
+                primaryText: 'Discount',
+                secondaryText: '₹ 0',
+              },
+              {
+                primaryText: 'Total',
+                secondaryText: `₹ ${cartAmount}`,
+              },
+            ]}
+            buttonText="CHECKOUT"
+            buttonLink="/checkout"
+          />
         </Bottom>
       </Box>
     </>

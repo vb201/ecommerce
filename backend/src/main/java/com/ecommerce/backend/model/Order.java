@@ -11,9 +11,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "orders")
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 
 public class Order {
 	@Id
@@ -31,48 +39,12 @@ public class Order {
 	@CreationTimestamp
 	private Timestamp orderDate;
 
-	public Timestamp getOrderDate() {
-		return orderDate;
-	}
+	private String orderStatus;
 
-	public void setOrderDate(Timestamp orderDate) {
-		this.orderDate = orderDate;
-	}
+	private String billingAddress;
 
-	public Long getId() {
-		return id;
-	}
+	private String shippingAddress;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-
-	public Order(Long id, User user, Product product) {
-		super();
-		this.id = id;
-		this.user = user;
-		this.product = product;
-	}
-
-	public Order() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	private String quantity;
 
 }

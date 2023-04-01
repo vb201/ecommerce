@@ -1,17 +1,21 @@
 import styled from '@emotion/styled';
 import { Add, Remove } from '@mui/icons-material';
+import { Typography } from '@mui/material';
+import { Box } from '@mui/system';
 import { useAtom } from 'jotai';
 import React from 'react';
-import { cartAtom } from '../../../../atoms/atom';
+import { cartAtom } from '../../atoms/atom';
 
 const Product = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  width: 100%;
 `;
 
 const ProductDetail = styled.div`
-  flex: 2;
+  ${(props) => (props.noDescription ? null : 'flex : 3')};
   display: flex;
+  width: 100%;
 `;
 
 const Image = styled.img`
@@ -19,20 +23,15 @@ const Image = styled.img`
 `;
 
 const Details = styled.div`
-  padding: 20px;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
+  flex-grow: 1;
 `;
 
-const ProductName = styled.span``;
-
-const ProductId = styled.span``;
-
-const ProductSize = styled.span``;
-
 const PriceDetail = styled.div`
-  flex: 1;
+  ${(props) => (props.noDescription ? null : 'flex : 1')};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -50,12 +49,22 @@ const ProductAmount = styled.div`
   margin: 5px;
 `;
 
-const ProductPrice = styled.div`
+const ProductDescription = styled.div`
   font-size: 30px;
   font-weight: 200;
 `;
 
-const ProductCard = ({ item, noDetails = true }) => {
+const TextBold = styled(Typography)`
+  font-weight: bold;
+  padding-right: 5px;
+`;
+
+const TextWrapper = styled(Box)`
+  display: flex;
+  align-items: start;
+`;
+
+const ProductCard = ({ item, noDescription = true }) => {
   const [cart, setCart] = useAtom(cartAtom);
   const addQuantityHandler = (productId) => {
     const newCart = cart.map((item) => {
@@ -89,18 +98,32 @@ const ProductCard = ({ item, noDetails = true }) => {
       <ProductDetail>
         <Image src={item.imageURI} />
         <Details>
-          <ProductName>
-            <b>Product:</b> {item.productName}
-          </ProductName>
-          <ProductId>
-            <b>ID:</b> {item.productId}
-          </ProductId>
-          <ProductSize>
-            <b>Description:</b> {item.productDescription}
-          </ProductSize>
+          <TextWrapper>
+            <TextBold>ID:</TextBold> {item.productId}
+          </TextWrapper>
+          <TextWrapper>
+            <TextBold>Product:</TextBold> {item.productName}
+          </TextWrapper>
+          {noDescription ? (
+            <>
+              <TextWrapper>
+                <TextBold>Price: </TextBold>₹ {item.price}
+              </TextWrapper>
+
+              <TextWrapper>
+                <TextBold>Quantity: </TextBold> {item.quantity}
+              </TextWrapper>
+            </>
+          ) : (
+            <>
+              <TextWrapper>
+                <TextBold>Description:</TextBold> {item.productDescription}
+              </TextWrapper>
+            </>
+          )}
         </Details>
       </ProductDetail>
-      {!noDetails && (
+      {!noDescription && (
         <PriceDetail>
           <ProductAmountContainer>
             <Add onClick={() => addQuantityHandler(item.productId)} />
@@ -108,7 +131,7 @@ const ProductCard = ({ item, noDetails = true }) => {
 
             <Remove onClick={() => removeQuantityHandler(item.productId)} />
           </ProductAmountContainer>
-          <ProductPrice>₹ {item.price}</ProductPrice>
+          <ProductDescription>₹ {item.price}</ProductDescription>
         </PriceDetail>
       )}
     </Product>
