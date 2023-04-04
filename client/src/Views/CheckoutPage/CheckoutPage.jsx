@@ -1,5 +1,4 @@
-import styled from '@emotion/styled';
-import { Box, TextField, Typography } from '@mui/material';
+import { TextField } from '@mui/material';
 import { useAtom } from 'jotai';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -14,48 +13,14 @@ import OrderSummary from '../../components/Summary/Summary';
 import { ToastContainer, toast } from 'react-toastify';
 import { TOAST_CONFIG } from '../../config';
 import axios from '../../API/axios';
+import {
+  CheckoutDetails,
+  CheckoutDetailsTitle,
+  CheckoutDetailsWrapper,
+  ProductDetails,
+  StyledBody,
+} from './CheckoutPage';
 
-const StyledBody = styled(Box)`
-  display: flex;
-  padding: 1rem;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
-`;
-
-const CheckoutDetails = styled(Box)`
-  display: flex;
-  flex: 2;
-  flex-direction: column;
-  align-items: start;
-
-  @media (max-width: 768px) {
-    align-items: center;
-  }
-`;
-
-const CheckoutDetailsWrapper = styled(Box)`
-  border: 1px solid #000;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 5px;
-  width: 80%;
-`;
-
-const CheckoutDetailsTitle = styled(Typography)`
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 1rem;
-`;
-
-const ProductDetails = styled(Box)`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
 const CheckoutPage = () => {
   const [user, setUser] = useAtom(userAtom);
   const [cart, setCart] = useAtom(cartAtom);

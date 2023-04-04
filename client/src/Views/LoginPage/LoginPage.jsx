@@ -1,8 +1,5 @@
-import { Button, TextField, Typography } from '@mui/material';
-import { Box } from '@mui/system';
 import { useEffect, useState } from 'react';
-import styled from '@emotion/styled';
-import { Link, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -11,53 +8,7 @@ import { authAtom, loggedInAtom, userAtom } from '../../atoms/atom';
 import { toast } from 'react-toastify';
 import axios from '../../API/axios';
 import { TOAST_CONFIG } from '../../config';
-
-const Container = styled(Box)`
-  width: 100%;
-  height: calc(100vh - 100px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const Wrapper = styled(Box)`
-  width: 40%;
-
-  @media (max-width: 768px) {
-    width: 80%;
-  }
-`;
-
-const Title = styled(Typography)`
-  font-size: 24px;
-  font-weight: 300;
-`;
-
-const StyledForm = styled.form`
-  display: flex;
-  flex-direction: column;
-`;
-
-const StyledInput = styled(TextField)`
-  margin: 1rem 0;
-  padding: 10px;
-  margin-bottom: 1rem;
-`;
-
-const StyledButton = styled(Button)`
-  width: 40%;
-  border: none;
-  padding: 1rem;
-  color: white;
-  cursor: pointer;
-  margin-bottom: 10px;
-`;
-
-const StyledLink = styled(Link)`
-  font-size: 1rem;
-  text-decoration: underline;
-  cursor: pointer;
-`;
+import { Container, StyledButton, StyledForm, StyledInput, StyledLink, Title, Wrapper } from './LoginPageStyles';
 
 const LoginPage = () => {
   const [, setAuth] = useAtom(authAtom);
