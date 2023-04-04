@@ -1,20 +1,20 @@
 package com.ecommerce.backend.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.backend.model.User;
 import com.ecommerce.backend.services.UserService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("api/users")
@@ -23,29 +23,18 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
-    }
+    @GetMapping("/")
+    public User getUser(@RequestHeader("Authorization") String authorizationHeader) {
+        String authToken = authorizationHeader.substring(7);
 
-    @GetMapping("/{userId}")
-    public User getUserById(@PathVariable Long userId) {
-        return userService.getUserById(userId);
-    }
-
-    @PutMapping("/{userId}")
-    public User updateUser(@PathVariable Long userId, @RequestBody User user) {
-        return userService.updateUser(userId, user);
-    }
-
-    @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable Long userId) {
-        userService.deleteUser(userId);
+        return userService.getUserByAuthToken(authToken);
     }
 
     @PostMapping("/login")
-    public Long login(@RequestBody User user) {
-        return userService.login(user);
+    public ResponseEntity login(@RequestBody User user, HttpServletRequest request,
+            HttpServletResponse response) {
+        return userService.login(user, request,
+                response);
     }
 
     @PostMapping("/register")

@@ -4,7 +4,11 @@ import { useState, useEffect, useCallback } from 'react';
 
 const initialState = [{}];
 
-export const useContentFetch = (fetchURL, sessionName) => {
+export const useContentFetch = (
+  fetchURL,
+  saveTosession,
+  sessionName = 'default'
+) => {
   const [contentState, setContentState] = useState(initialState);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -16,24 +20,28 @@ export const useContentFetch = (fetchURL, sessionName) => {
       setLoading(true);
       axios.get(fetchURL).then((response) => {
         setContentState(response.data);
-        sessionStorage.setItem(sessionName, JSON.stringify(response.data));
+        if (saveTosession)
+          sessionStorage.setItem(sessionName, JSON.stringify(response.data));
       });
     } catch (error) {
       setError(true);
     }
     setLoading(false);
-  }, [fetchURL, sessionName]);
+  }, [fetchURL, saveTosession, sessionName]);
 
   // Initial Fetch
   useEffect(() => {
-    const existingState = JSON.parse(sessionStorage.getItem(sessionName));
+    if (!saveTosession) fetch();
+    else {
+      const existingState = JSON.parse(sessionStorage.getItem(sessionName));
 
-    if (existingState) {
-      setContentState(existingState);
-    } else {
-      fetch();
+      if (existingState) {
+        setContentState(existingState);
+      } else {
+        fetch();
+      }
     }
-  }, [fetch, sessionName]);
+  }, [fetch, saveTosession, sessionName]);
 
   return {
     contentState,

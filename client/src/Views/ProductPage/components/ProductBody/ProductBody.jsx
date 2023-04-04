@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Add, Remove } from '@mui/icons-material';
 import { Box, Button, Typography } from '@mui/material';
 import { useAtom } from 'jotai';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   cartAmountAtom,
   cartAtom,
@@ -10,8 +10,12 @@ import {
 } from '../../../../atoms/atom';
 
 const Wrapper = styled(Box)`
-  padding: 50px;
+  padding: 1rem;
   display: flex;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const ImageContainer = styled(Box)`
@@ -20,7 +24,12 @@ const ImageContainer = styled(Box)`
 
 const Image = styled.img`
   width: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  height: 85vh;
+
+  @media (max-width: 768px) {
+    height: 40vh;
+  }
 `;
 
 const InfoContainer = styled(Box)`
@@ -31,25 +40,28 @@ const InfoContainer = styled(Box)`
   margin-left: 2rem;
 `;
 
-const ProductName = styled(Typography)``;
+const ProductName = styled(Typography)`
+  font-weight: 700;
+`;
 
-const ProductDescription = styled.p`
+const ProductDescription = styled(Typography)`
   margin: 20px 0px;
 `;
 
-const Price = styled.span`
+const Price = styled(Typography)`
   font-weight: 100;
   font-size: 40px;
+  padding: 10px 0px;
 `;
 
-const AddContainer = styled.div`
-  width: 50%;
+const AddContainer = styled(Box)`
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
 `;
 
-const AmountContainer = styled.div`
+const AmountContainer = styled(Box)`
   display: flex;
   align-items: center;
   font-weight: 700;
@@ -73,30 +85,28 @@ const ProductBody = ({ product }) => {
   const [, setCartQuantity] = useAtom(cartQuantityAtom);
   const [, setCartAmount] = useAtom(cartAmountAtom);
 
-  const addToCartHandler = (product) => {
-    setCart((prevCart) => {
-      const isProductInCart = prevCart.find(
-        (item) => item.productId === product.productId
-      );
-
-      if (isProductInCart) {
-        return cart.map((item) =>
-          item.productId === product.productId
-            ? { ...item, quantity: currentQuantity }
-            : item
+  const addToCartHandler = useCallback(
+    (product) => {
+      setCart((prevCart) => {
+        const isProductInCart = prevCart.find(
+          (item) => item.productId === product.productId
         );
-      }
 
-      return [...prevCart, { ...product, quantity: currentQuantity }];
-    });
-  };
+        if (isProductInCart) {
+          return cart.map((item) =>
+            item.productId === product.productId
+              ? { ...item, quantity: currentQuantity }
+              : item
+          );
+        }
+
+        return [...prevCart, { ...product, quantity: currentQuantity }];
+      });
+    },
+    [cart, currentQuantity, setCart]
+  );
 
   useEffect(() => {
-    let newCartQuantity = 0;
-    cart.forEach((item) => {
-      newCartQuantity += item.quantity;
-    });
-
     cart.forEach((item) => {
       if (item.quantity === 0) {
         setCart(
@@ -105,7 +115,7 @@ const ProductBody = ({ product }) => {
       }
     });
 
-    setCartQuantity(newCartQuantity);
+    setCartQuantity(cart.reduce((acc, item) => acc + item.quantity, 0));
 
     setCartAmount(
       cart.reduce((acc, item) => acc + item.quantity * item.price, 0)
@@ -114,7 +124,7 @@ const ProductBody = ({ product }) => {
 
   // if product is in cart, update the quantity
   useEffect(() => {
-    if (cart === undefined) {
+    if (cart?.length === 0) {
       setCurrentQuantity(1);
       return;
     }
@@ -136,12 +146,13 @@ const ProductBody = ({ product }) => {
 
       <InfoContainer>
         <ProductName
-          variant="h3"
+          variant="h4"
           component="div"
         >
           {product.productName}
         </ProductName>
         <ProductDescription>{product.productDescription}</ProductDescription>
+
         <Price>₹ {product.price}</Price>
         <AddContainer>
           <AmountContainer>

@@ -1,17 +1,20 @@
 import { Button, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import { Link } from 'react-router-dom';
-import { FormControl } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { registerUser } from '../../services/UserService';
+import { toast } from 'react-toastify';
+import { TOAST_CONFIG } from '../../config';
+import axios from '../../API/axios';
+import { useAtom } from 'jotai';
+import { loggedInAtom } from '../../atoms/atom';
 
 const Container = styled(Box)`
   width: 100%;
-  height: calc(100vh - 65px);
+  height: calc(100vh - 100px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -63,6 +66,16 @@ const SignunPage = () => {
   const [password, setPassword] = useState('');
   const [confirmpassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [loggedIn] = useAtom(loggedInAtom);
+
+  const navigate = useNavigate();
+
+  // return to home page if user is logged in
+  useEffect(() => {
+    if (loggedIn) {
+      navigate('/');
+    }
+  }, [loggedIn, navigate]);
 
   const validationSchema = yup.object().shape({
     name: yup.string().required('Name is required'),
@@ -85,11 +98,20 @@ const SignunPage = () => {
   });
 
   const registerUserHandler = (data) => {
-    try {
-      registerUser(data.name, data.email, data.password);
-    } catch (error) {
-      console.log(error);
-    }
+    axios
+      .post('/users/register', {
+        userName: name,
+        userEmail: email,
+        userPassword: password,
+      })
+      .then((res) => {
+        toast.success('User Registered successfully', TOAST_CONFIG);
+        navigate('/login');
+      })
+      .catch((error) => {
+        toast.error('Error occured', TOAST_CONFIG);
+        console.error(error);
+      });
   };
 
   return (
@@ -141,9 +163,9 @@ const SignunPage = () => {
             variant="contained"
             type="submit"
           >
-            Signup
+            Register
           </StyledButton>
-          <StyledLink to="/sigiup">Already have an account</StyledLink>
+          <StyledLink to="/login">Already have an account</StyledLink>
         </StyledFrom>
       </Wrapper>
     </Container>

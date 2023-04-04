@@ -8,7 +8,10 @@ import com.ecommerce.backend.model.Order;
 
 public interface OrderService {
     List<Order> getAllOrders();
+
     Order getOrderById(Long orderId);
-    ResponseEntity<String> createOrder(Order order);
-    List<Order> getOrdersByUserId(Long userId);
+
+    ResponseEntity<String> createOrder(List<Order> order, String authToken);
+
+    List<Order> getOrdersByUserAuthToken(String authToken, String status);
 }

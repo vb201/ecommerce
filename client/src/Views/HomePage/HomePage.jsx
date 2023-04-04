@@ -10,8 +10,7 @@ const StyledBody = styled(Box)`
   justify-content: center;
   align-items: center;
   height: 100%;
-  width: 100%;
-  background-color: #f5f5f5;
+  padding: 1rem;
 `;
 
 const HomePage = () => {

@@ -11,6 +11,10 @@ const API = {
     const endpoint = `users/register`;
     return endpoint;
   },
+  fetchUserOrderByStatus: (status) => {
+    const endpoint = `orders/user/${status}`;
+    return endpoint;
+  },
 };
 
 export default API;

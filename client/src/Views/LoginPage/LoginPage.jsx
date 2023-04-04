@@ -1,16 +1,20 @@
 import { Button, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { loginUser } from '../../services/UserService';
+import { useAtom } from 'jotai';
+import { authAtom, loggedInAtom, userAtom } from '../../atoms/atom';
+import { toast } from 'react-toastify';
+import axios from '../../API/axios';
+import { TOAST_CONFIG } from '../../config';
 
 const Container = styled(Box)`
   width: 100%;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 100px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,7 +22,6 @@ const Container = styled(Box)`
 
 const Wrapper = styled(Box)`
   width: 40%;
-  background-color: white;
 
   @media (max-width: 768px) {
     width: 80%;
@@ -57,9 +60,23 @@ const StyledLink = styled(Link)`
   cursor: pointer;
 `;
 
-const SigninPage = () => {
+const LoginPage = () => {
+  const [, setAuth] = useAtom(authAtom);
+  const [, setLoggedIn] = useAtom(loggedInAtom);
+  const [, setUser] = useAtom(userAtom);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const navigate = useNavigate();
+
+  const [loggedIn] = useAtom(loggedInAtom);
+
+  // return to home page if user is logged in
+  useEffect(() => {
+    if (loggedIn) {
+      navigate('/');
+    }
+  }, [loggedIn, navigate]);
 
   const validationSchema = yup.object().shape({
     email: yup.string().email('Email is invalid').required('Email is required'),
@@ -78,12 +95,35 @@ const SigninPage = () => {
   });
 
   const SigninUserHandler = (data) => {
-    try {
-      const response = loginUser(data.email, data.password);
-      response.then((res) => {});
-    } catch (err) {
-      console.log(err);
-    }
+    const { email, password } = data;
+    axios
+      .post('/users/login', {
+        userEmail: email,
+        userPassword: password,
+      })
+      .then((res) => {
+        const authToken = res.headers.authorization.split(' ')[1];
+
+        axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
+
+        setAuth(authToken);
+        axios.get('/users/').then((res) => {
+          if (res.data !== '') {
+            sessionStorage.removeItem('user');
+            setUser(res.data);
+            sessionStorage.setItem('user', JSON.stringify(res.data));
+            toast.success("You're logged in!", TOAST_CONFIG);
+            setLoggedIn(true);
+            navigate('/');
+          } else {
+            toast.error('Login in again', TOAST_CONFIG);
+          }
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error('Invalid credentials', TOAST_CONFIG);
+      });
   };
 
   return (
@@ -114,13 +154,13 @@ const SigninPage = () => {
             variant="contained"
             type="submit"
           >
-            Signin
+            Login
           </StyledButton>
-          <StyledLink to="/signup">Create a neww account</StyledLink>
+          <StyledLink to="/register">Create a new account</StyledLink>
         </StyledForm>
       </Wrapper>
     </Container>
   );
 };
 
-export default SigninPage;
+export default LoginPage;

@@ -1,8 +1,10 @@
 package com.ecommerce.backend.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -38,30 +40,45 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ResponseEntity<String> createOrder(Order order) {
+    public ResponseEntity<String> createOrder(List<Order> order, String authToken) {
 
-    	// Check if user is not null and has a valid ID
-        if (order.getUser() == null || order.getUser().getId() == null) {
-            return ResponseEntity.badRequest().body("User is required");
+        User existingUser = userRepository.findByAuthToken(authToken);
+
+        if (existingUser == null) {
+            return null;
         }
 
-        // Check if product is not null and has a valid ID
-        if (order.getProduct() == null || order.getProduct().getProductId() == null) {
-            return ResponseEntity.badRequest().body("Product is required");
+        existingUser.setUserBillingAddress(order.get(0).getBillingAddress());
+        existingUser.setUserShippingAddress(order.get(0).getShippingAddress());
+        userRepository.save(existingUser);
+
+        for (Order o : order) {
+            Product existingProduct = productRepository.findByProductId(o.getProduct().getProductId());
+
+            if (existingProduct == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Product not found with id: " + o.getProduct().getProductId());
+            }
+
+            o.setProduct(existingProduct);
+            o.setUser(existingUser);
+            orderRepository.save(o);
         }
 
-        User user = userRepository.findById(order.getUser().getId()).orElseThrow();
-        Product product = productRepository.findById(order.getProduct().getProductId()).orElseThrow();
-
-        Order newOrder = new Order();
-        newOrder.setUser(user);
-        newOrder.setProduct(product);
-        orderRepository.save(newOrder);
-        return ResponseEntity.ok("Order created successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Order created successfully");
     }
 
     @Override
-    public List<Order> getOrdersByUserId(Long userId) {
-        return orderRepository.findByUserId(userId);
+    public List<Order> getOrdersByUserAuthToken(String authToken, String status) {
+        List<Order> orders = orderRepository.findByUserAuthToken(authToken);
+
+        if (status.equals("all")) {
+            return orders;
+        }
+
+        List<Order> pendingOrders = orders.stream().filter(o -> o.getOrderStatus().equals(status))
+                .collect(Collectors.toList());
+
+        return pendingOrders;
     }
 }

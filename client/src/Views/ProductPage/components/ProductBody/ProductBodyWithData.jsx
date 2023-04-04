@@ -10,11 +10,11 @@ const ProductBody = () => {
     loading,
     error,
     contentState: ProductData,
-  } = useContentFetch(API.fetchProductById(id));
+  } = useContentFetch(API.fetchProductById(id), true, `product-${id}`);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error...</div>;
-  if (Object.keys(ProductData).length > 0)
+  if (Object.keys(ProductData).length >= 1)
     return <Product product={ProductData} />;
 };
 

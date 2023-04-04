@@ -9,5 +9,5 @@ import com.ecommerce.backend.model.Order;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-	List<Order> findByUserId(Long userId);
+	List<Order> findByUserAuthToken(String authToken);
 }

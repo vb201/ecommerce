@@ -1,10 +1,8 @@
 import styled from '@emotion/styled';
 import { Button, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { useAtom } from 'jotai';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { cartAmountAtom } from '../../atoms/atom';
 
 const Summary = styled(Box)`
   flex: 1;
@@ -53,8 +51,8 @@ const OrderSummary = ({
     <Summary>
       <SummaryTitle>{title} SUMMARY</SummaryTitle>
       {children}
-      {textItems?.map((item) => (
-        <SummaryItem>
+      {textItems?.map((item, index) => (
+        <SummaryItem key={index}>
           <SummaryItemText>{item.primaryText}</SummaryItemText>
           <SummaryItemPrice>
             {item.secondaryText ? item.secondaryText : 0}

@@ -1,14 +1,19 @@
 package com.ecommerce.backend.services;
 
-import java.util.List;
-
+import org.springframework.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.ecommerce.backend.helper.GenerateToken;
 import com.ecommerce.backend.model.User;
 import com.ecommerce.backend.repository.UserRepository;
 
-import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -16,37 +21,47 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
+    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public User getUserById(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id " + userId));
+    public User getUserByAuthToken(String authToken) {
+        User existingUser = userRepository.findByAuthToken(authToken);
+
+        if (existingUser == null) {
+            return null;
+        }
+        return existingUser;
     }
 
     public User createUser(User user) {
+        user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
         return userRepository.save(user);
     }
 
-    public User updateUser(Long userId, User user) {
-        User existingUser = getUserById(userId);
-        existingUser.setUserName(user.getUsername());
-        existingUser.setUserEmail(user.getUserEmail());
-        existingUser.setUserPassword(user.getUserPassword());
-        return userRepository.save(existingUser);
-    }
+    public ResponseEntity login(User user, HttpServletRequest request,
+            HttpServletResponse response) {
 
-    public void deleteUser(Long userId) {
-        userRepository.deleteById(userId);
-    }
+        User exisingUser = userRepository.findByUserEmail(user.getUserEmail());
+        // Check if the username and password are valid
 
-    public Long login(User user) {
-        User existingUser = userRepository.findByUserEmail(user.getUserEmail());
-        if (existingUser != null && existingUser.getUserPassword().equals(user.getUserPassword())) {
-            return existingUser.getId();
+        if (exisingUser == null) {
+            System.out.println(exisingUser);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
-        return null;
+        if (passwordEncoder.matches(user.getUserPassword(), exisingUser.getUserPassword())) {
+            GenerateToken generateToken = new GenerateToken();
+            exisingUser.setAuthToken(generateToken.generateToken());
+            userRepository.save(exisingUser); // save changes to the existing user
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Authorization", "Bearer " + exisingUser.getAuthToken());
+            headers.add("Access-Control-Expose-Headers", "Authorization");
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body("Logged in successfully");
+        } else {
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+        }
     }
 
 }

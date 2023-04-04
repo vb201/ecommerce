@@ -16,13 +16,14 @@ import com.ecommerce.backend.services.ProductService;
 
 @RestController
 @RequestMapping("/api/products")
-@CrossOrigin(origins = "*" )
+@CrossOrigin(origins = "*")
 public class ProductController {
     @Autowired
     private ProductService productService;
 
     @GetMapping
     public List<Product> getAllProducts() {
+
         return productService.getAllProducts();
     }
 

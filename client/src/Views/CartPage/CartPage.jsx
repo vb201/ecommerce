@@ -41,6 +41,10 @@ const TopText = styled(Typography)`
 const Bottom = styled(Box)`
   display: flex;
   justify-content: space-between;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const Info = styled.div`

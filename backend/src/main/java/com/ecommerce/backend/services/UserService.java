@@ -1,19 +1,18 @@
 package com.ecommerce.backend.services;
 
-import java.util.List;
+import org.springframework.http.ResponseEntity;
 
 import com.ecommerce.backend.model.User;
 
-public interface UserService {
-	List<User> getAllUsers();
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-	User getUserById(Long userId);
+public interface UserService {
+
+	User getUserByAuthToken(String authToken);
 
 	User createUser(User user);
 
-	User updateUser(Long userId, User user);
-
-	void deleteUser(Long userId);
-
-	Long login(User user);
+	ResponseEntity login(User user, HttpServletRequest request,
+			HttpServletResponse response);
 }

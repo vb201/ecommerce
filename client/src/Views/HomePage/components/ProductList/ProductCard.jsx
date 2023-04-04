@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
   Card,
@@ -17,17 +16,45 @@ import {
 } from '../../../../atoms/atom';
 import styled from '@emotion/styled';
 
+const StyledCardMedia = styled(CardMedia)`
+  max-height: 350px;
+  object-fit: contain;
+  background-color: #fff;
+`;
 const StyledCardContent = styled(CardContent)`
-  display: 'flex';
-  align-items: 'center';
-  justify-content: 'center';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  height: 350px;
 `;
 
 const StyledPrice = styled(Typography)`
   margin: 10px 0px;
   font-weight: 600;
+  font-size: 1.3rem;
 `;
-const ProductListItem = ({ product }) => {
+
+const StyledCardActions = styled(CardActions)`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 1rem 2rem;
+  gap: 1rem;
+`;
+
+const AddToCardButton = styled(Button)`
+  background-color: #f0c14b;
+  color: #111;
+  font-weight: 600;
+
+  &:hover {
+    background-color: #ddb347;
+  }
+`;
+const ProductCard = ({ product }) => {
   const [cart, setCart] = useAtom(cartAtom);
   const [, setCartQuantity] = useAtom(cartQuantityAtom);
   const [, setCartAmount] = useAtom(cartAmountAtom);
@@ -50,10 +77,7 @@ const ProductListItem = ({ product }) => {
     });
   };
   useEffect(() => {
-    let newCartQuantity = 0;
-    cart.forEach((item) => {
-      newCartQuantity += item.quantity;
-    });
+    setCartQuantity(cart.reduce((acc, item) => acc + item.quantity, 0));
 
     cart.forEach((item) => {
       if (item.quantity === 0) {
@@ -63,8 +87,6 @@ const ProductListItem = ({ product }) => {
       }
     });
 
-    setCartQuantity(newCartQuantity);
-
     setCartAmount(
       cart.reduce((acc, item) => acc + item.quantity * item.price, 0)
     );
@@ -72,7 +94,7 @@ const ProductListItem = ({ product }) => {
 
   return (
     <Card>
-      <CardMedia
+      <StyledCardMedia
         component="img"
         image={product.imageURI}
         title={product.productName}
@@ -83,29 +105,16 @@ const ProductListItem = ({ product }) => {
           variant="h5"
           component="div"
         >
-          {product.productName}
+          {product?.productName?.slice(0, 40) + '...'}
         </Typography>
-        <Typography
-          variant="body2"
-          color="text.secondary"
-        >
-          {product.productDescription}
+        <Typography color="text.secondary">
+          {product.productDescription?.slice(0, 200) + '...'}
         </Typography>
-        <StyledPrice
-          variant="body2"
-          color="text.secondary"
-        >
+        <StyledPrice color="text.secondary">
           Price: ₹ {product.price}
         </StyledPrice>
       </StyledCardContent>
-      <CardActions
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-around',
-          backgroundColor: '#fff',
-          borderRadius: '1rem',
-        }}
-      >
+      <StyledCardActions>
         <Link to={`/product/${product.productId}`}>
           <Button
             color="primary"
@@ -115,22 +124,17 @@ const ProductListItem = ({ product }) => {
             View Product
           </Button>
         </Link>
-        <Button
+        <AddToCardButton
           color="primary"
           size="large"
           variant="contained"
           onClick={() => addToCartHandler(product)}
         >
           Add to Cart
-        </Button>
-      </CardActions>
+        </AddToCardButton>
+      </StyledCardActions>
     </Card>
   );
 };
 
-ProductListItem.propTypes = {
-  product: PropTypes.object.isRequired,
-  addToCartHandler: PropTypes.func.isRequired,
-};
-
-export default ProductListItem;
+export default ProductCard;
