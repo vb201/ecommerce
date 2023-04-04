@@ -106,7 +106,6 @@ const CheckoutPage = () => {
         toast.error('Something went wrong', TOAST_CONFIG);
       });
 
-    console.log('payload', orderPayload);
     // Make API call to update user
     axios.get('/users/').then((res) => {
       if (res.data !== '') {

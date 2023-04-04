@@ -1,6 +1,5 @@
 import axios from '../API/axios';
 import { useState, useEffect, useCallback } from 'react';
-// import { checkExistingState } from '../helpers';
 
 const initialState = [{}];
 
@@ -18,6 +17,7 @@ export const useContentFetch = (
     try {
       setError(false);
       setLoading(true);
+
       axios.get(fetchURL).then((response) => {
         setContentState(response.data);
         if (saveTosession)
@@ -31,8 +31,9 @@ export const useContentFetch = (
 
   // Initial Fetch
   useEffect(() => {
-    if (!saveTosession) fetch();
-    else {
+    if (!saveTosession) {
+      fetch();
+    } else {
       const existingState = JSON.parse(sessionStorage.getItem(sessionName));
 
       if (existingState) {

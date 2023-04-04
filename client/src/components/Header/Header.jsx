@@ -14,7 +14,6 @@ const StyledWrapper = styled(Box)`
 `;
 const Header = ({ title }) => {
   return (
-    // Generate an MUI header here
     <StyledWrapper>
       <Typography
         variant="h3"

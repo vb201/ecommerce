@@ -18,7 +18,7 @@ const SummaryTitle = styled.h1`
 `;
 
 const SummaryItem = styled(Box)`
-  margin: 30px 0px;
+  margin: 1.3rem 0px;
   display: flex;
   justify-content: space-between;
 `;
@@ -29,7 +29,7 @@ const SummaryItemPrice = styled(Typography)``;
 
 const StyledButton = styled(Button)`
   width: 100%;
-  padding: 10px;
+  padding: 1.6rem;
   background-color: black;
   color: white;
   font-weight: 600;

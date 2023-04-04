@@ -15,6 +15,8 @@ import {
   cartQuantityAtom,
 } from '../../../../atoms/atom';
 import styled from '@emotion/styled';
+import { toast } from 'react-toastify';
+import { TOAST_CONFIG } from '../../../../config';
 
 const StyledCardMedia = styled(CardMedia)`
   max-height: 350px;
@@ -32,7 +34,7 @@ const StyledCardContent = styled(CardContent)`
 `;
 
 const StyledPrice = styled(Typography)`
-  margin: 10px 0px;
+  margin: 1rem 0px;
   font-weight: 600;
   font-size: 1.3rem;
 `;
@@ -73,6 +75,7 @@ const ProductCard = ({ product }) => {
         );
       }
 
+      toast.success('Product added to cart', TOAST_CONFIG);
       return [...prevCart, { ...product, quantity: 1 }];
     });
   };

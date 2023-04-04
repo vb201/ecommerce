@@ -7,6 +7,9 @@ import { cartAmountAtom, cartAtom, cartQuantityAtom } from '../../atoms/atom';
 import OrderSummary from '../../components/Summary/Summary';
 import ProductCard from '../../components/ProductCard/ProductCard';
 
+const Container = styled(Box)`
+  padding 1rem;
+`;
 const Title = styled.h1`
   font-weight: 300;
   text-align: center;
@@ -16,11 +19,11 @@ const Top = styled(Box)`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px;
+  padding: 1rem;
 `;
 
 const TopButton = styled(Button)`
-  padding: 10px;
+  padding: 1rem;
   font-weight: 600;
   cursor: pointer;
   color: black;
@@ -35,7 +38,7 @@ const TopButton = styled(Button)`
 const TopText = styled(Typography)`
   text-decoration: underline;
   cursor: pointer;
-  margin: 0px 10px;
+  margin: 0px 1rem;
 `;
 
 const Bottom = styled(Box)`
@@ -79,11 +82,7 @@ const Cart = () => {
 
   return (
     <>
-      <Box
-        sx={{
-          padding: '1rem',
-        }}
-      >
+      <Container>
         <Title>YOUR BAG</Title>
         <Top>
           <Link to="/">
@@ -129,7 +128,7 @@ const Cart = () => {
             buttonLink="/checkout"
           />
         </Bottom>
-      </Box>
+      </Container>
     </>
   );
 };

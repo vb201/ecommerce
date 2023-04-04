@@ -8,6 +8,8 @@ import {
   cartAtom,
   cartQuantityAtom,
 } from '../../../../atoms/atom';
+import { toast } from 'react-toastify';
+import { TOAST_CONFIG } from '../../../../config';
 
 const Wrapper = styled(Box)`
   padding: 1rem;
@@ -45,13 +47,13 @@ const ProductName = styled(Typography)`
 `;
 
 const ProductDescription = styled(Typography)`
-  margin: 20px 0px;
+  margin: 1rem 0px;
 `;
 
 const Price = styled(Typography)`
   font-weight: 100;
   font-size: 40px;
-  padding: 10px 0px;
+  padding: 0.7rem 0px;
 `;
 
 const AddContainer = styled(Box)`
@@ -102,7 +104,9 @@ const ProductBody = ({ product }) => {
 
         return [...prevCart, { ...product, quantity: currentQuantity }];
       });
+      toast.success('Quantity updated in cart', TOAST_CONFIG);
     },
+
     [cart, currentQuantity, setCart]
   );
 

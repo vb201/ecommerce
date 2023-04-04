@@ -51,7 +51,7 @@ const PriceDetail = styled(Box)`
 const ProductAmountContainer = styled(Box)`
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
 `;
 
 const ProductAmount = styled(Box)`

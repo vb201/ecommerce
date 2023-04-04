@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
 
         if (exisingUser == null) {
             System.out.println(exisingUser);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid username or password");
         }
         if (passwordEncoder.matches(user.getUserPassword(), exisingUser.getUserPassword())) {
             GenerateToken generateToken = new GenerateToken();
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
                     .body("Logged in successfully");
         } else {
 
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid username or password");
         }
     }
 
