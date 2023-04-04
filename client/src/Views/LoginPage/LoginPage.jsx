@@ -1,25 +1,37 @@
 import { useEffect, useState } from 'react';
-import {  useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useAtom } from 'jotai';
-import { authAtom, loggedInAtom, userAtom } from '../../atoms/atom';
+import {
+  authAtom,
+  loggedInAtom,
+  redirectedFromAtom,
+  userAtom,
+} from '../../atoms/atom';
 import { toast } from 'react-toastify';
 import axios from '../../API/axios';
 import { TOAST_CONFIG } from '../../config';
-import { Container, StyledButton, StyledForm, StyledInput, StyledLink, Title, Wrapper } from './LoginPageStyles';
+import {
+  Container,
+  StyledButton,
+  StyledForm,
+  StyledInput,
+  StyledLink,
+  Title,
+  Wrapper,
+} from './LoginPageStyles';
 
 const LoginPage = () => {
   const [, setAuth] = useAtom(authAtom);
-  const [, setLoggedIn] = useAtom(loggedInAtom);
+  const [loggedIn, setLoggedIn] = useAtom(loggedInAtom);
   const [, setUser] = useAtom(userAtom);
+  const [redirectedFrom, setRedirectedFrom] = useAtom(redirectedFromAtom);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const navigate = useNavigate();
-
-  const [loggedIn] = useAtom(loggedInAtom);
 
   // return to home page if user is logged in
   useEffect(() => {
@@ -64,7 +76,16 @@ const LoginPage = () => {
             sessionStorage.setItem('user', JSON.stringify(res.data));
             toast.success("You're logged in!", TOAST_CONFIG);
             setLoggedIn(true);
-            navigate('/');
+
+            console.log('redirectedFrom: ', redirectedFrom);
+            if (redirectedFrom !== '') {
+              const path = redirectedFrom;
+              console.log('path: ', typeof path);
+              setRedirectedFrom('');
+              navigate(path);
+            } else {
+              navigate('/');
+            }
           } else {
             toast.error('Login in again', TOAST_CONFIG);
           }

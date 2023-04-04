@@ -8,3 +8,5 @@ export const cartAtom = atom([]);
 export const authAtom = atom('');
 export const userAtom = atom({});
 export const loggedInAtom = atom(false);
+
+export const redirectedFromAtom = atom('');

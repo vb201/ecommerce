@@ -19,7 +19,7 @@ import {
   CheckoutDetailsWrapper,
   ProductDetails,
   StyledBody,
-} from './CheckoutPage';
+} from './CheckoutPageStyles';
 
 const CheckoutPage = () => {
   const [user, setUser] = useAtom(userAtom);

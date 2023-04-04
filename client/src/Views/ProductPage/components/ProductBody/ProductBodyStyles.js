@@ -50,13 +50,13 @@ const AddContainer = styled(Box)`
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-around;
 `;
 
 const AmountContainer = styled(Box)`
   display: flex;
   align-items: center;
   font-weight: 700;
+  margin-right: 2rem;
 `;
 
 const Amount = styled.input`

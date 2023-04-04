@@ -74,7 +74,7 @@ function App() {
             element={
               <PrivateRoute
                 isAuth={isLoggedIn}
-                navigateTo={'/login'}
+                navigatedFrom={'/checkout'}
               >
                 <CheckoutPage />
               </PrivateRoute>
@@ -85,7 +85,7 @@ function App() {
             element={
               <PrivateRoute
                 isAuth={isLoggedIn}
-                navigateTo={'/login'}
+                navigatedFrom={'/orders'}
               >
                 <OrderPage />
               </PrivateRoute>
