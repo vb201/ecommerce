@@ -1,11 +1,24 @@
 import styled from '@emotion/styled';
 import {
   Button,
+  Card,
   CardActions,
   CardContent,
   CardMedia,
   Typography,
 } from '@mui/material';
+
+const StyledCard = styled(Card)`
+  @hover {
+    cursor: pointer;
+    scale: 1.05;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+  }
+
+  @transition {
+    duration: 0.5s;
+  }
+`;
 
 const StyledCardMedia = styled(CardMedia)`
   max-height: 350px;
@@ -52,4 +65,5 @@ export {
   StyledPrice,
   StyledCardActions,
   AddToCardButton,
+  StyledCard,
 };

@@ -30,18 +30,17 @@ const StyledFrom = styled.form`
 `;
 
 const StyledInput = styled(TextField)`
-  margin: 1rem 0;
-  padding: 1rem;
-  margin-bottom: 1rem;
+  margin: 10px 0px;
 `;
 
 const StyledButton = styled(Button)`
   width: 40%;
   border: none;
-  padding: 1rem;
+  padding: 10px 20px;
   color: white;
   cursor: pointer;
-  margin-bottom: 10px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 `;
 
 const StyledLink = styled(Link)`

@@ -29,9 +29,7 @@ const StyledForm = styled.form`
 `;
 
 const StyledInput = styled(TextField)`
-  margin: 1rem 0;
-  padding: 10px;
-  margin-bottom: 1rem;
+  margin: 10px 0px;
 `;
 
 const StyledButton = styled(Button)`
@@ -40,7 +38,8 @@ const StyledButton = styled(Button)`
   padding: 1rem;
   color: white;
   cursor: pointer;
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
 `;
 
 const StyledLink = styled(Link)`

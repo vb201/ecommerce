@@ -29,7 +29,7 @@ const SummaryItemPrice = styled(Typography)``;
 
 const StyledButton = styled(Button)`
   width: 100%;
-  padding: 1.6rem;
+  padding: 1rem;
   background-color: black;
   color: white;
   font-weight: 600;

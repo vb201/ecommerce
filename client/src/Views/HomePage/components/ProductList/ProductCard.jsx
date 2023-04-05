@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Typography, Button } from '@mui/material';
+import { Typography, Button } from '@mui/material';
 import { useAtom } from 'jotai';
 import {
   cartAmountAtom,
@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import { TOAST_CONFIG } from '../../../../config';
 import {
   AddToCardButton,
+  StyledCard,
   StyledCardActions,
   StyledCardContent,
   StyledCardMedia,
@@ -57,7 +58,7 @@ const ProductCard = ({ product }) => {
   }, [cart, setCart, setCartAmount, setCartQuantity]);
 
   return (
-    <Card>
+    <StyledCard>
       <StyledCardMedia
         component="img"
         image={product.imageURI}
@@ -97,7 +98,7 @@ const ProductCard = ({ product }) => {
           Add to Cart
         </AddToCardButton>
       </StyledCardActions>
-    </Card>
+    </StyledCard>
   );
 };
 
